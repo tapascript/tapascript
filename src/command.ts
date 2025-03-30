@@ -33,8 +33,9 @@ class Command {
 
   async create_js_base() {
     try {
-      const cloneDirectory = await this.rlReader.js_base_project_name();
-      this.cloner(REPOSITORY.JS_BASE, cloneDirectory);
+      let cloneDirectory = await this.rlReader.js_base_project_name();
+      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.JS_BASE.defaultCloneFolder;
+      this.cloner(REPOSITORY.JS_BASE.repoLink, cloneDirectory);
       console.log("\n Happy hacking");
       console.log("\n hit `npm run start`");
     } catch (err) {
@@ -43,10 +44,11 @@ class Command {
   }
   async create_react_base_vite() {
     try {
-      const cloneDirectory = await this.rlReader.react_base_project_name();
-      this.cloner(REPOSITORY.REACT_BASE, cloneDirectory);
+      let cloneDirectory = await this.rlReader.react_base_project_name();
+      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.REACT_BASE.defaultCloneFolder;
+      this.cloner(REPOSITORY.REACT_BASE.repoLink, cloneDirectory);
       console.log("\n Happy hacking");
-      console.log("\n hit `npm run start`");
+      console.log("\n hit `npm run dev`");
     } catch (err) {
       ErrorHander.handleExitError((err as Error)?.message);
     }

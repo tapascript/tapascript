@@ -1,13 +1,13 @@
 {
   "name": "tapascript",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "tsc"
   },
-  "bin": "./index.js",
+  "bin": ".dist/src/index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.14"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
