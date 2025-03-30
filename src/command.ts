@@ -8,14 +8,11 @@ import fs from "fs";
 const ErrorHander = new ErrorHandler();
 
 class Command {
-  /**
-   *
-   * @param {ReadLines} rlReader
-   */
-  constructor(rlReader) {
+  rlReader: ReadLines;
+  constructor(rlReader: ReadLines) {
     this.rlReader = rlReader;
   }
-  cloner(repolink, projectName) {
+  cloner(repolink: string, projectName: string) {
     try {
       let command = `git clone ${repolink}`;
       if (projectName) command += ` ${projectName}`;
@@ -41,7 +38,17 @@ class Command {
       console.log("\n Happy hacking");
       console.log("\n hit `npm run start`");
     } catch (err) {
-      ErrorHander.handleExitError(err?.message);
+      ErrorHander.handleExitError((err as Error)?.message);
+    }
+  }
+  async create_react_base_vite() {
+    try {
+      const cloneDirectory = await this.rlReader.react_base_project_name();
+      this.cloner(REPOSITORY.REACT_BASE, cloneDirectory);
+      console.log("\n Happy hacking");
+      console.log("\n hit `npm run start`");
+    } catch (err) {
+      ErrorHander.handleExitError((err as Error)?.message);
     }
   }
 }
