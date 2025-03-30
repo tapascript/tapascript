@@ -8,14 +8,11 @@ import fs from "fs";
 const ErrorHander = new ErrorHandler();
 
 class Command {
-  /**
-   *
-   * @param {ReadLines} rlReader
-   */
-  constructor(rlReader) {
+  rlReader: ReadLines;
+  constructor(rlReader: ReadLines) {
     this.rlReader = rlReader;
   }
-  cloner(repolink, projectName) {
+  cloner(repolink: string, projectName: string) {
     try {
       let command = `git clone ${repolink}`;
       if (projectName) command += ` ${projectName}`;
@@ -36,12 +33,24 @@ class Command {
 
   async create_js_base() {
     try {
-      const cloneDirectory = await this.rlReader.js_base_project_name();
-      this.cloner(REPOSITORY.JS_BASE, cloneDirectory);
+      let cloneDirectory = await this.rlReader.js_base_project_name();
+      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.JS_BASE.defaultCloneFolder;
+      this.cloner(REPOSITORY.JS_BASE.repoLink, cloneDirectory);
       console.log("\n Happy hacking");
       console.log("\n hit `npm run start`");
     } catch (err) {
-      ErrorHander.handleExitError(err?.message);
+      ErrorHander.handleExitError((err as Error)?.message);
+    }
+  }
+  async create_react_base_vite() {
+    try {
+      let cloneDirectory = await this.rlReader.react_base_project_name();
+      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.REACT_BASE.defaultCloneFolder;
+      this.cloner(REPOSITORY.REACT_BASE.repoLink, cloneDirectory);
+      console.log("\n Happy hacking");
+      console.log("\n hit `npm run dev`");
+    } catch (err) {
+      ErrorHander.handleExitError((err as Error)?.message);
     }
   }
 }
