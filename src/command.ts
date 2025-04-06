@@ -4,6 +4,8 @@ import { REPOSITORY } from "./const.js";
 import child from "child_process";
 import path from "path";
 import fs from "fs";
+import { buildBranchName } from "./helper.js";
+import chalk from "chalk";
 
 const ErrorHander = new ErrorHandler();
 
@@ -12,9 +14,10 @@ class Command {
   constructor(rlReader: ReadLines) {
     this.rlReader = rlReader;
   }
-  cloner(repolink: string, projectName: string) {
+  cloner(repolink: string, projectName: string, branchName?: string) {
     try {
-      let command = `git clone ${repolink}`;
+      const branch = branchName ?? "main";
+      let command = `git clone -b ${branch} ${repolink}`;
       if (projectName) command += ` ${projectName}`;
 
       child.execSync(command, {
@@ -34,9 +37,28 @@ class Command {
   async create_js_base() {
     try {
       let cloneDirectory = await this.rlReader.js_base_project_name();
-      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.JS_BASE.defaultCloneFolder;
-      this.cloner(REPOSITORY.JS_BASE.repoLink, cloneDirectory);
-      console.log("\n Happy hacking");
+      const { JS_BASE } = REPOSITORY;
+      if (!cloneDirectory?.trim().length) cloneDirectory = JS_BASE.defaultCloneFolder;
+
+      const options = {
+        [JS_BASE.branches.tailwind]: await this.rlReader.js_base_with_tailwind(),
+      };
+
+      this.rlReader.rl.close();
+      const branchName = buildBranchName(options, JS_BASE.branches.main);
+
+      console.log("\nyou have choosen");
+      Object.entries(options).forEach((item) => {
+        console.log(
+          chalk.blueBright.bold(item[0]),
+          chalk.blueBright.bold("-"),
+          chalk.green.bold(item[1] ? "yes" : "no")
+        );
+      });
+
+      this.cloner(JS_BASE.repoLink, cloneDirectory, branchName);
+
+      console.log(chalk.greenBright("\n Happy hacking"));
       console.log("\n hit `npm run start`");
     } catch (err) {
       ErrorHander.handleExitError((err as Error)?.message);
@@ -45,9 +67,13 @@ class Command {
   async create_react_base_vite() {
     try {
       let cloneDirectory = await this.rlReader.react_base_project_name();
-      if (!cloneDirectory?.trim().length) cloneDirectory = REPOSITORY.REACT_BASE.defaultCloneFolder;
-      this.cloner(REPOSITORY.REACT_BASE.repoLink, cloneDirectory);
-      console.log("\n Happy hacking");
+
+      const { REACT_BASE } = REPOSITORY;
+
+      if (!cloneDirectory?.trim().length) cloneDirectory = REACT_BASE.defaultCloneFolder;
+      this.cloner(REACT_BASE.repoLink, cloneDirectory, REACT_BASE.branchs.main);
+
+      console.log(chalk.greenBright("\n Happy hacking"));
       console.log("\n hit `npm run dev`");
     } catch (err) {
       ErrorHander.handleExitError((err as Error)?.message);
