@@ -1,9 +1,10 @@
-export const buildBranchName = (options: Record<string, boolean>, defaultBranch: string) => {
-  const branchName = Object.entries(options).reduce((acc, item, index) => {
-    const val = item[1];
-    if (val) acc += item[0] + (index === Object.keys(options)?.length - 1 ? "" : "-");
-    return acc;
-  }, "");
+import { REPOSITORY } from "./const.js";
+import { TJsBaseCommand } from "./types.js";
 
-  return !branchName?.length ? defaultBranch : branchName;
+export const JS_BASE_COMMAND_TO_BRANCH_MAPPING: Record<
+  TJsBaseCommand,
+  keyof (typeof REPOSITORY)["JS_BASE"]["branches"]
+> = {
+  "--with-tailwind": REPOSITORY.JS_BASE.branches.tailwind,
+  "--with-shadcn": REPOSITORY.JS_BASE.branches.shadcn,
 };

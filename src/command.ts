@@ -4,8 +4,9 @@ import { REPOSITORY } from "./const.js";
 import child from "child_process";
 import path from "path";
 import fs from "fs";
-import { buildBranchName } from "./helper.js";
+import { JS_BASE_COMMAND_TO_BRANCH_MAPPING } from "./helper.js";
 import chalk from "chalk";
+import { JSBaseBranches, TJsBaseCommand } from "./types.js";
 
 const ErrorHander = new ErrorHandler();
 
@@ -34,30 +35,20 @@ class Command {
     }
   }
 
-  async create_js_base() {
+  async create_js_base(command?: TJsBaseCommand) {
     try {
       let cloneDirectory = await this.rlReader.js_base_project_name();
       const { JS_BASE } = REPOSITORY;
       if (!cloneDirectory?.trim().length) cloneDirectory = JS_BASE.defaultCloneFolder;
 
-      const options = {
-        [JS_BASE.branches.tailwind]: await this.rlReader.js_base_with_tailwind(),
-      };
+      let cloneBranch: JSBaseBranches = "main";
+      if (command) {
+        const branch = JS_BASE_COMMAND_TO_BRANCH_MAPPING[command];
+        if (branch) cloneBranch = branch;
+      }
 
       this.rlReader.rl.close();
-      const branchName = buildBranchName(options, JS_BASE.branches.main);
-
-      console.log("\nyou have choosen");
-      Object.entries(options).forEach((item) => {
-        console.log(
-          chalk.blueBright.bold(item[0]),
-          chalk.blueBright.bold("-"),
-          chalk.green.bold(item[1] ? "yes" : "no")
-        );
-      });
-
-      this.cloner(JS_BASE.repoLink, cloneDirectory, branchName);
-
+      this.cloner(JS_BASE.repoLink, cloneDirectory, cloneBranch);
       console.log(chalk.greenBright("\n Happy hacking"));
       console.log("\n hit `npm run start`");
     } catch (err) {

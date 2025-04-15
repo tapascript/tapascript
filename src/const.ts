@@ -5,6 +5,7 @@ export const REPOSITORY = {
     branches: {
       main: "main",
       tailwind: "tailwind",
+      shadcn: "shadcn",
     },
   },
   REACT_BASE: {

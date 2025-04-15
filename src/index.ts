@@ -2,6 +2,7 @@
 import { default as CommandService } from "./command.js";
 import ReadLines from "./readlines.js";
 import readline from "readline";
+import { TJsBaseCommand } from "./types.js";
 
 const readlineInterface = readline.createInterface({
   input: process.stdin,
@@ -31,7 +32,8 @@ function main() {
     process.exit(1);
   }
 
-  actualCommandExecuter();
+  const lastArgument = process.argv[3] as TJsBaseCommand;
+  actualCommandExecuter(lastArgument);
 }
 
 main();
