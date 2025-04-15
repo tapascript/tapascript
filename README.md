@@ -1,7 +1,41 @@
+# 🛠️ Tapascript CLI
 
+Get the bare bone package using tapascript cli tools which provides base javscript template with tailwind, shandcn etc out of the box.
 
-##
+## 📦 Install & Use
 
-we will be creating a npm package called `tapascript`
+Use via `npx` (no install required):
 
-user can clone our base package with `npx tapascript js-base` so that in future when we introduce more packages we will have an sequence like `npx tapascript node-base` or `npx tapascript next-base` which will eventually create a boiler code for the user
+```bash
+npx tapascript <template-name> [options]
+```
+
+# 📁 Available Templates
+
+- `js-base` for the javascript basic setup.
+
+- `node-base` for the nodejs basic setup. (upcoming)
+
+- `react-base` for the react basic setup. (upcoming)
+
+- `next-base` for the react basic setup. (upcoming)
+
+# 🚀 Example Commands
+
+#### Basic javascript project setup.
+
+```bash
+npx tapascript js-base
+```
+
+#### Basic javascript project with tailwindcss configured.
+
+```bash
+npx tapascript js-base --with-tailwind
+```
+
+#### Basic javascript project with shadcn configured.
+
+```bash
+npx tapascirpt js-base --with-shadcn
+```
