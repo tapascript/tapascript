@@ -11,7 +11,7 @@ export const REPOSITORY = {
     repoLink: "https://github.com/Angryman18/react-base-vite.git",
     defaultCloneFolder: "react-base-vite",
     branchs: {
-      main: "main",
+      master: "master",
     },
   },
 } as const;

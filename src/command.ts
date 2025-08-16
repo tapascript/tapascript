@@ -71,7 +71,7 @@ class Command {
       const { REACT_BASE } = REPOSITORY;
 
       if (!cloneDirectory?.trim().length) cloneDirectory = REACT_BASE.defaultCloneFolder;
-      this.cloner(REACT_BASE.repoLink, cloneDirectory, REACT_BASE.branchs.main);
+      this.cloner(REACT_BASE.repoLink, cloneDirectory, REACT_BASE.branchs.master);
 
       console.log(chalk.greenBright("\n Happy hacking"));
       console.log("\n hit `npm run dev`");
